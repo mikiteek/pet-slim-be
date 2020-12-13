@@ -22,10 +22,14 @@ class Server {
   }
 
   async start() {
+    await this.initServices();
+    this.startListening();
+  }
+  async initServices() {
+    this.initMiddleware();
     this.initRoutes();
     await this.initDatabase();
-    this.initMiddleware();
-    this.startListening();
+    this.initErrorMiddleware();
   }
 
   startListening() {
@@ -53,6 +57,8 @@ class Server {
     this.#server.use(express.json());
     this.#server.use(cors());
     this.#server.use(morgan("combined"));
+  }
+  initErrorMiddleware() {
     this.#server.use(errorMiddleware);
   }
 }
