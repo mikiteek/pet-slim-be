@@ -11,9 +11,18 @@ const createdUserToReturnService = (user) => {
     name: user.name,
     registerDate: user.registerDate
   }
-}
+};
+
+const loginUserToReturnService = (user) => {
+  return {
+    id: user._id,
+    email: user.email,
+    name: user.name,
+  }
+};
 
 module.exports = {
   isUserExistService,
   createdUserToReturnService,
+  loginUserToReturnService
 };

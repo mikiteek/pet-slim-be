@@ -12,55 +12,19 @@ const databaseConnect = require("./utils/database");
 
 const errorMiddleware = require("./middleware/errorMiddleware");
 
-const PORT = process.env.PORT || 4000;
+const app = express();
+// middleware
+app.use(express.json());
+app.use(cors());
+app.use(morgan("combined"));
+// routes
+app.use("/auth", authRouter);
+app.use("/users", userRouter);
+app.use("/products", productRouter);
+app.use("/days", dayRouter);
+// database
+databaseConnect();
+// error middleware
+app.use(errorMiddleware);
 
-class Server {
-  #server;
-
-  constructor() {
-    this.#server = express();
-  }
-
-  async start() {
-    await this.initServices();
-    this.startListening();
-  }
-  async initServices() {
-    this.initMiddleware();
-    this.initRoutes();
-    await this.initDatabase();
-    this.initErrorMiddleware();
-  }
-
-  startListening() {
-    this.#server.listen(PORT, () => {
-      console.log("Server is listening on port", PORT);
-    });
-  }
-
-  get server() {
-    return this.#server;
-  }
-
-  async initDatabase() {
-    await databaseConnect();
-  }
-
-  initRoutes() {
-    this.#server.use("/auth", authRouter);
-    this.#server.use("/users", userRouter);
-    this.#server.use("/products", productRouter);
-    this.#server.use("/days", dayRouter);
-  }
-
-  initMiddleware() {
-    this.#server.use(express.json());
-    this.#server.use(cors());
-    this.#server.use(morgan("combined"));
-  }
-  initErrorMiddleware() {
-    this.#server.use(errorMiddleware);
-  }
-}
-
-module.exports = Server;
+module.exports = app;
