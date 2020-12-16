@@ -17,11 +17,18 @@ class NotFoundError extends Error {
     super(message);
     this.status = 404;
   }
+}
 
+class UnauthorizedError extends Error {
+  constructor(message = "Unauthorized") {
+    super(message);
+    this.status = 401;
+  }
 }
 
 module.exports = {
   UserAlreadyExistError,
   BadRequestError,
   NotFoundError,
+  UnauthorizedError,
 };

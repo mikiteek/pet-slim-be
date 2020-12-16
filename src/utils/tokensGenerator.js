@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const expiresInAccess = 60 * 60 * 24;
+const expiresInAccess = 60 * 60 * 8;
 const expiresInRefresh = 60 * 60 * 24 * 7;
 
 const generateAccessToken = async (payload) => {
