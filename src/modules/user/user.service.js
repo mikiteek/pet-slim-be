@@ -45,10 +45,19 @@ const checkDecodedUserOrThrowByTokenService = async (decoded) => {
   }
 }
 
+const authorizeUserToReturnService = (user) => {
+  return {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+  };
+}
+
 module.exports = {
   isUserExistService,
   createdUserToReturnService,
   loginUserToReturnService,
   getTokenPayloadService,
   checkDecodedUserOrThrowByTokenService,
+  authorizeUserToReturnService,
 };

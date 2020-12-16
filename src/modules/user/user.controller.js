@@ -7,7 +7,8 @@ const {
   createdUserToReturnService,
   loginUserToReturnService,
   getTokenPayloadService,
-  checkDecodedUserOrThrowByTokenService
+  checkDecodedUserOrThrowByTokenService,
+  authorizeUserToReturnService,
 } = require("./user.service");
 const {UserAlreadyExistError, NotFoundError, UnauthorizedError} = require("../error/errors");
 const {validateRegisterInput, validateLoginInput} = require("../../utils/validateUser");
@@ -90,7 +91,7 @@ class UserController {
       const decoded = await verifyAccessToken(token);
       const user = await checkDecodedUserOrThrowByTokenService(decoded);
 
-      req.user = loginUserToReturnService(user);
+      req.user = authorizeUserToReturnService(user);
       req.token = token;
       next();
     }
