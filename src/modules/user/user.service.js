@@ -1,4 +1,5 @@
 const User = require("./user.model");
+const {UnauthorizedError} = require("../error/errors");
 
 const isUserExistService = async (email) => {
   const user = await User.findOne({email});
@@ -21,8 +22,33 @@ const loginUserToReturnService = (user) => {
   }
 };
 
+const getTokenPayloadService = (user) => {
+  return {
+    id: user._id,
+    email: user.email,
+  }
+};
+
+const checkDecodedUserOrThrowByTokenService = async (decoded) => {
+  try {
+    if (!decoded) {
+      throw new UnauthorizedError();
+    }
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      throw new UnauthorizedError();
+    }
+    return user;
+  }
+  catch (error) {
+    throw new UnauthorizedError();
+  }
+}
+
 module.exports = {
   isUserExistService,
   createdUserToReturnService,
-  loginUserToReturnService
+  loginUserToReturnService,
+  getTokenPayloadService,
+  checkDecodedUserOrThrowByTokenService,
 };
