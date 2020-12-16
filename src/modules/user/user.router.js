@@ -13,4 +13,10 @@ userRouter.post(
   userController.loginUser,
 );
 
+userRouter.post(
+  "/regenerateToken",
+  userController.authorizeUser,
+  userController.regenerateAccessToken,
+);
+
 module.exports = userRouter;

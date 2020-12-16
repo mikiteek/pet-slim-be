@@ -1,11 +1,17 @@
+const User = require("./user.model");
 const {encryptPassword} = require("../../utils/passwordEncryptor");
 const {isPasswordValid} = require("../../utils/isPasswordValid");
 const {generateAccessToken, generateRefreshToken} = require("../../utils/tokensGenerator");
-const User = require("./user.model");
-const {isUserExistService, createdUserToReturnService, loginUserToReturnService} = require("./user.service");
+const {
+  isUserExistService,
+  createdUserToReturnService,
+  loginUserToReturnService,
+  getTokenPayloadService,
+  checkDecodedUserOrThrowByTokenService
+} = require("./user.service");
 const {UserAlreadyExistError, NotFoundError, UnauthorizedError} = require("../error/errors");
 const {validateRegisterInput, validateLoginInput} = require("../../utils/validateUser");
-const {verifyAccessToken} = require("../../utils/verifyToken");
+const {verifyAccessToken, verifyRefreshToken} = require("../../utils/verifyToken");
 
 class UserController {
   async registerUser(req, res, next) {
@@ -62,10 +68,7 @@ class UserController {
       if (!match) {
         throw new NotFoundError("Wrong email or password");
       }
-      const tokenPayload = {
-        id: user._id,
-        email: user.email,
-      }
+      const tokenPayload = getTokenPayloadService(user);
       return res.status(200).json({
         user: loginUserToReturnService(user),
         refreshToken: await generateRefreshToken(tokenPayload),
@@ -85,13 +88,8 @@ class UserController {
       }
       const token = authorizationHeader.replace("Bearer ", "");
       const decoded = await verifyAccessToken(token);
-      if (!decoded) {
-        throw new UnauthorizedError();
-      }
-      const user = await User.findById(decoded.id);
-      if (!user) {
-        throw new UnauthorizedError();
-      }
+      const user = await checkDecodedUserOrThrowByTokenService(decoded);
+
       req.user = loginUserToReturnService(user);
       req.token = token;
       next();
@@ -100,6 +98,23 @@ class UserController {
       next(error);
     }
   }
+
+  async regenerateAccessToken(req, res, next) {
+    try {
+      const {body: {refreshToken}} = req;
+      const decoded = await verifyRefreshToken(refreshToken);
+      const user = await checkDecodedUserOrThrowByTokenService(decoded);
+
+      const tokenPayload = getTokenPayloadService(user);
+      const token = await generateAccessToken(tokenPayload);
+      return res.status(200).json({token});
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+
 }
 
 module.exports = new UserController();
