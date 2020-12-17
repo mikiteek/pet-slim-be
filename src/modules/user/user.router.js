@@ -19,4 +19,9 @@ userRouter.post(
   userController.regenerateAccessToken,
 );
 
+userRouter.patch(
+  "/summaryPublic",
+  userController.summaryPublic,
+);
+
 module.exports = userRouter;

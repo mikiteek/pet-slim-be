@@ -13,7 +13,7 @@ class ProductController {
       if (error) {
         return res.status(400).send(error.details);
       }
-      const product = new Product({...body});
+      const product = new Product(body);
       await product.save();
       return res.status(201).json(product);
     }
