@@ -9,10 +9,13 @@ const {
   getTokenPayloadService,
   checkDecodedUserOrThrowByTokenService,
   authorizeUserToReturnService,
+  calcDailyCaloriesService
 } = require("./user.service");
+const {getNotAllowedCategoryProducts} = require("../product/product.service");
 const {UserAlreadyExistError, NotFoundError, UnauthorizedError} = require("../error/errors");
 const {validateRegisterInput, validateLoginInput} = require("../../utils/validateUser");
 const {verifyAccessToken, verifyRefreshToken} = require("../../utils/verifyToken");
+const {validateSummary} = require("../../utils/validateSummary");
 
 class UserController {
   async registerUser(req, res, next) {
@@ -115,6 +118,23 @@ class UserController {
     }
   }
 
+  async summaryPublic(req, res, next) {
+    try {
+      const {body} = req;
+      const error = validateSummary(body);
+      if (error) {
+        return res.status(400).send(error.details);
+      }
+      const summary = {
+        dailyCalories: calcDailyCaloriesService(body),
+        notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
+      }
+      return res.status(200).json(summary)
+    }
+    catch (error) {
+      next(error);
+    }
+  }
 
 }
 
