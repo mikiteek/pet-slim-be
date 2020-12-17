@@ -1,4 +1,5 @@
 const User = require("./user.model");
+const Summary = require("../summary/summary.model");
 const {encryptPassword} = require("../../utils/passwordEncryptor");
 const {isPasswordValid} = require("../../utils/isPasswordValid");
 const {generateAccessToken, generateRefreshToken} = require("../../utils/tokensGenerator");
@@ -130,6 +131,42 @@ class UserController {
         notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
       }
       return res.status(200).json(summary)
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
+  async summaryPrivate(req, res, next) {
+    try {
+      const {body, user} = req;
+      const error = validateSummary(body);
+      if (error) {
+        return res.status(400).send(error.details);
+      }
+      let summary = await Summary.findOneAndUpdate(
+        {
+          userId: user.id
+        },
+        {
+          ...body,
+          dayNormCalories: calcDailyCaloriesService(body),
+          notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
+        },
+        {
+          new: true,
+        }
+      );
+      if (!summary) {
+        summary = new Summary({
+          ...body,
+          userId: user.id,
+          dayNormCalories: calcDailyCaloriesService(body),
+          notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
+        });
+        await summary.save();
+      }
+      return res.status(200).json(summary);
     }
     catch (error) {
       next(error);

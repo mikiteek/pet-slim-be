@@ -19,10 +19,6 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  summary: {
-    type: ObjectId,
-    ref: "Summary"
-  },
   daysProducts: [
     {
       type: ObjectId,

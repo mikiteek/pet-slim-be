@@ -24,4 +24,10 @@ userRouter.patch(
   userController.summaryPublic,
 );
 
+userRouter.post(
+  "/summaryPrivate",
+  userController.authorizeUser,
+  userController.summaryPrivate,
+);
+
 module.exports = userRouter;
