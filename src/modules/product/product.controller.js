@@ -1,13 +1,26 @@
-const mongoose = require("mongoose");
-const {Schema} = mongoose;
+const Product = require("./product.model");
+const {validateAddProduct} = require("../../utils/validateProduct");
+const {UnauthorizedError} = require("../error/errors");
 
-const productSchema = new Schema({
-  categories: [{type: String}],
-  weight: {type: Number, default: 100},
-  title: {ru: String, ua: String},
-  calories: {type: Number},
-  groupBloodNotAllowed: {1: Boolean, 2: Boolean, 3: Boolean, 4: Boolean},
-});
+class ProductController {
+  async addProduct(req, res, next) {
+    try {
+      const {body, user} = req;
+      if (user.role !== "admin") {
+        throw new UnauthorizedError();
+      }
+      const error = validateAddProduct(body);
+      if (error) {
+        return res.status(400).send(error.details);
+      }
+      const product = new Product({...body});
+      await product.save();
+      return res.status(201).json(product);
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+}
 
-
-module.exports = mongoose.model("Product", productSchema);
+module.exports = new ProductController();
