@@ -103,22 +103,22 @@ describe("user service", () => {
     describe("login user return to client", () => {
       it("should return login user object to client", () => {
         const user = loginUserToReturnService(userCreated);
-        expect(user).toEqual({
+        expect(user).toEqual(expect.objectContaining({
           id: expect.any(Object),
           email: expect.any(String),
           name: expect.any(String),
-        });
+        }));
       });
     });
 
     describe("create user return to client", () => {
       it("should return create user object to client", () => {
         const user = createdUserToReturnService(userCreated);
-        expect(user).toEqual({
+        expect(user).toEqual(expect.objectContaining({
           id: expect.any(Object),
-          registerDate: expect.any(Date),
+          email: expect.any(String),
           name: expect.any(String),
-        });
+        }));
       });
     });
   });

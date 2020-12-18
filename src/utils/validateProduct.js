@@ -20,6 +20,17 @@ const validateAddProduct = (body) => {
   return validationResult.error;
 }
 
+const validateAddProductToDay = (body) => {
+  const validationSchema = Joi.object({
+    product: Joi.string().required(),
+    weight: Joi.number().positive(),
+    date: Joi.date(),
+  });
+  const validationResult = validationSchema.validate(body);
+  return validationResult.error;
+}
+
 module.exports = {
   validateAddProduct,
+  validateAddProductToDay
 };

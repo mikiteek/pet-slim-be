@@ -55,14 +55,7 @@ class UserController {
       if (error) {
         return res.status(400).send(error.details);
       }
-      const user = await User.findOne(
-        {email},
-        {
-          email: true,
-          name: true,
-          credentials: true,
-        }
-      );
+      const user = await User.findOne({email});
       if (!user) {
         throw new NotFoundError("Wrong email or password");
       }

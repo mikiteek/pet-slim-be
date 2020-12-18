@@ -25,7 +25,7 @@ const userSchema = new Schema({
   daysProducts: [
     {
       type: ObjectId,
-      ref: "ConsumedProduct"
+      ref: "Day"
     }
   ]
 });
