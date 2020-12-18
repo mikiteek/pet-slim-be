@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const User = require("../../modules/user/user.model");
 const app = require("../../server");
-const {testUser} = require("./user.variables");
+const {testUser, testUserRegisterBlock} = require("./user.variables");
 const {createUserTestHelper} = require("./user.helper");
 
 describe("users mutations", () => {
@@ -22,7 +22,7 @@ describe("users mutations", () => {
           .post("/users/register")
           .set('Content-Type', 'application/json')
           .send({
-            ...testUser,
+            ...testUserRegisterBlock,
           })
           .expect(201);
         userResponse = response.body;
