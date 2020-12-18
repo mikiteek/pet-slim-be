@@ -165,6 +165,7 @@ class UserController {
           notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
         });
         await summary.save();
+        return res.status(201).json(summary);
       }
       return res.status(200).json(summary);
     }

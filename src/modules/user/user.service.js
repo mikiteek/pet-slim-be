@@ -2,8 +2,13 @@ const User = require("./user.model");
 const {UnauthorizedError} = require("../error/errors");
 
 const isUserExistService = async (email) => {
-  const user = await User.findOne({email});
-  return user;
+  try {
+    const user = await User.findOne({email});
+    return user;
+  }
+  catch (error) {
+    console.log(error.message)
+  }
 }
 
 const createdUserToReturnService = (user) => {
