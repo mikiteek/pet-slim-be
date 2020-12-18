@@ -10,4 +10,8 @@ productRouter.post(
   productController.addProduct,
 );
 
+productRouter.get("/",
+  productController.getListProducts,
+);
+
 module.exports = productRouter;

@@ -21,6 +21,17 @@ const getNotAllowedCategoryProducts = async (groupBlood) => {
   return await Product.distinct("categories", queryParams);
 };
 
+const checkQueryParamsService = ({page=1, limit=10}) => {
+  if (page < 1 || limit < 1 || isNaN(page) || isNaN(limit)) {
+    return false;
+  }
+  return {
+    page: Number(page),
+    limit: Number(limit),
+  };
+}
+
 module.exports = {
   getNotAllowedCategoryProducts,
+  checkQueryParamsService,
 };
