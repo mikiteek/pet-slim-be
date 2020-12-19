@@ -51,8 +51,9 @@ class DayController {
       if (error) {
         return res.status(400).send(error.details);
       }
+      const dayProducts = await Day.getDayProducts(date, user);
 
-      return res.status(200).json({a:"b"});
+      return res.status(200).json(dayProducts);
     }
     catch (error) {
       next(error);

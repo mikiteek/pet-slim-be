@@ -17,7 +17,7 @@ dayRouter.delete(
 );
 
 dayRouter.get(
-  "/",
+  "/:date",
   userController.authorizeUser,
   dayController.getDayInfo,
 );
