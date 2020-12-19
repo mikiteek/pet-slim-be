@@ -2,6 +2,7 @@ const Day = require("./day.model");
 const User = require("../user/user.model");
 const {validateAddProductToDay} = require("../../utils/validateProduct");
 const {validateObjectId} = require("../../utils/objectIdValidator");
+const {validateDayForGetInfo} = require("../../utils/validateDay");
 const {BadRequestError} = require("../error/errors");
 const {optionsUpdateUserService} = require("./day.service");
 
@@ -13,16 +14,12 @@ class DayController {
       if (error) {
         return res.status(400).send(error.details);
       }
-      const day = new Day(body);
+      const day = new Day({
+        ...body,
+        user: user.id,
+      });
       await day.save();
-      const userUpdated = await User.findByIdAndUpdate(
-        user.id,
-        {
-          $push: {daysProducts: day._id}
-        },
-        optionsUpdateUserService,
-      );
-      return res.status(201).json(userUpdated);
+      return res.status(201).json(day);
     }
     catch (error) {
       next(error);
@@ -31,7 +28,7 @@ class DayController {
 
   async removeProductFromDay(req, res, next) {
     try {
-      const {params: {id}, user} = req;
+      const {params: {id}} = req;
       const valid = validateObjectId(id);
       if (!valid) {
         throw new BadRequestError("Wrong 'id' param");
@@ -40,14 +37,7 @@ class DayController {
       if (!dayRemoved) {
         return res.status(204).json({message: "Nothing to remove"})
       }
-      const userUpdated = await User.findByIdAndUpdate(
-        user.id,
-        {
-          $pull: { daysProducts: id },
-        },
-        optionsUpdateUserService,
-      );
-      return res.status(200).json(userUpdated);
+      return res.status(200).json(dayRemoved);
     }
     catch (error) {
       next(error);
@@ -56,7 +46,13 @@ class DayController {
 
   async getDayInfo(req, res, next) {
     try {
+      const {params: {date}, user} = req;
+      const error = validateDayForGetInfo(date);
+      if (error) {
+        return res.status(400).send(error.details);
+      }
 
+      return res.status(200).json({a:"b"});
     }
     catch (error) {
       next(error);

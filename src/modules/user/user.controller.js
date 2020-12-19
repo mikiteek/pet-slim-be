@@ -139,7 +139,7 @@ class UserController {
       }
       let summary = await Summary.findOneAndUpdate(
         {
-          userId: user.id
+          user: user.id
         },
         {
           ...body,
@@ -153,7 +153,7 @@ class UserController {
       if (!summary) {
         summary = new Summary({
           ...body,
-          userId: user.id,
+          user: user.id,
           dayNormCalories: calcDailyCaloriesService(body),
           notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
         });

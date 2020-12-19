@@ -24,7 +24,6 @@ const loginUserToReturnService = (user) => {
     id: user._id,
     email: user.email,
     name: user.name,
-    daysProducts: user.daysProducts
   };
 }
 

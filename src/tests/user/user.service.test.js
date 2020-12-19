@@ -116,7 +116,7 @@ describe("user service", () => {
         const user = createdUserToReturnService(userCreated);
         expect(user).toEqual(expect.objectContaining({
           id: expect.any(Object),
-          email: expect.any(String),
+          registerDate: expect.any(Date),
           name: expect.any(String),
         }));
       });

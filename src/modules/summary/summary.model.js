@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const {Schema, ObjectId} = mongoose;
 
 const summarySchema = new Schema({
-  userId: {
+  user: {
     type: ObjectId,
+    ref: "User",
   },
   height: Number,
   age: Number,
