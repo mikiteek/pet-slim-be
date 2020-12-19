@@ -1,10 +1,8 @@
 const Day = require("./day.model");
-const User = require("../user/user.model");
 const {validateAddProductToDay} = require("../../utils/validateProduct");
 const {validateObjectId} = require("../../utils/objectIdValidator");
 const {validateDayForGetInfo} = require("../../utils/validateDay");
 const {BadRequestError} = require("../error/errors");
-const {optionsUpdateUserService} = require("./day.service");
 
 class DayController {
   async addProductToDay(req, res, next) {

@@ -1,5 +1,5 @@
 const User = require("./user.model");
-const Summary = require("../summary/summary.model");
+const Summary = require("./summary.model");
 const {encryptPassword} = require("../../utils/passwordEncryptor");
 const {isPasswordValid} = require("../../utils/isPasswordValid");
 const {generateAccessToken, generateRefreshToken} = require("../../utils/tokensGenerator");

@@ -51,8 +51,8 @@ describe("product queries", () => {
         pagingCounter: expect.any(Number),
         hasPrevPage: expect.any(Boolean),
         hasNextPage: expect.any(Boolean),
-        prevPage: expect.any(Object),
-        nextPage: expect.any(Object),
+        prevPage: expect.any(Object), // how to define null or Number
+        nextPage: expect.any(Object), // how to define null or Number
       });
     });
     it('should return 404', async () => {
