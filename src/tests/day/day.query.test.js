@@ -77,5 +77,13 @@ describe("days query", () => {
         }),
       ]));
     });
+
+    it("should return 404", async () => {
+      const response = await request(app)
+        .get("/days/1975-12-25")
+        .set("Accept", "application/json")
+        .set("Authorization", "Bearer " + token)
+        .expect(404)
+    });
   });
 });

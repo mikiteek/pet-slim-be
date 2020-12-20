@@ -1,8 +1,9 @@
 const Day = require("./day.model");
+const Product = require("../product/product.model");
 const {validateAddProductToDay} = require("../../utils/validateProduct");
 const {validateObjectId} = require("../../utils/objectIdValidator");
 const {validateDayForGetInfo} = require("../../utils/validateDay");
-const {BadRequestError} = require("../error/errors");
+const {BadRequestError, NotFoundError} = require("../error/errors");
 
 class DayController {
   async addProductToDay(req, res, next) {
@@ -12,6 +13,15 @@ class DayController {
       if (error) {
         return res.status(400).send(error.details);
       }
+      const validProductId = validateObjectId(body.product);
+      if(!validProductId) {
+        throw new BadRequestError("Wrong product's id param");
+      }
+      const product = await Product.findById(body.product);
+      if (!product) {
+        throw new NotFoundError();
+      }
+
       const day = new Day({
         ...body,
         user: user.id,
@@ -50,7 +60,9 @@ class DayController {
         return res.status(400).send(error.details);
       }
       const dayProducts = await Day.getDayProducts(date, user);
-
+      if (!dayProducts.length) {
+        throw new NotFoundError();
+      }
       return res.status(200).json(dayProducts);
     }
     catch (error) {
