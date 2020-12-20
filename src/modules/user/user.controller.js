@@ -10,7 +10,8 @@ const {
   getTokenPayloadService,
   checkDecodedUserOrThrowByTokenService,
   authorizeUserToReturnService,
-  calcDailyCaloriesService
+  calcDailyCaloriesService,
+  queryToNumbersService,
 } = require("./user.service");
 const {getNotAllowedCategoryProducts} = require("../product/product.service");
 const {UserAlreadyExistError, NotFoundError, UnauthorizedError} = require("../error/errors");
@@ -119,9 +120,10 @@ class UserController {
       if (error) {
         return res.status(400).send(error.details);
       }
+      const queryNumbersType = queryToNumbersService(query);
       const summary = {
-        dailyCalories: calcDailyCaloriesService(query),
-        notAllowedCategories: await getNotAllowedCategoryProducts(query.bloodType),
+        dayNormCalories: calcDailyCaloriesService(queryNumbersType),
+        notAllowedCategories: await getNotAllowedCategoryProducts(queryNumbersType.bloodType),
       }
       return res.status(200).json(summary)
     }

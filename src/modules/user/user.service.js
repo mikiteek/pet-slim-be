@@ -68,6 +68,16 @@ const calcDailyCaloriesService = ({currentWeight, height, age, targetWeight}) =>
   return dailyCal;
 }
 
+const queryToNumbersService = ({currentWeight, height, age, targetWeight, bloodType}) => {
+  return {
+    currentWeight: Number(currentWeight),
+    height: Number(height),
+    age: Number(age),
+    targetWeight: Number(targetWeight),
+    bloodType: Number(bloodType),
+  }
+}
+
 module.exports = {
   isUserExistService,
   createdUserToReturnService,
@@ -76,4 +86,5 @@ module.exports = {
   checkDecodedUserOrThrowByTokenService,
   authorizeUserToReturnService,
   calcDailyCaloriesService,
+  queryToNumbersService,
 };
