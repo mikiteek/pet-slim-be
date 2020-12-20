@@ -15,7 +15,7 @@
   "schemes": [
     "http"
   ],
-  "host": "localhost:4000",
+  "host": "https://desolate-brook-81952.herokuapp.com/",
   "basePath": "/",
   "paths": {
     "/days/{id}": {
@@ -29,10 +29,7 @@
             "name": "Authorization",
             "description": "User token",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
-            }
+            "type": "string"
           },
           {
             "in": "path",
@@ -74,10 +71,7 @@
             "name": "Authorization",
             "description": "User token",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
-            }
+            "type": "string"
           },
           {
             "in": "path",
@@ -131,10 +125,7 @@
             "name": "Authorization",
             "description": "User token",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
-            }
+            "type": "string"
           },
           {
             "in": "body",
@@ -173,10 +164,7 @@
             "name": "Authorization",
             "description": "User token",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
-            }
+            "type": "string"
           },
           {
             "in": "query",
@@ -351,9 +339,6 @@
                 "refreshToken": {
                   "type": "string"
                 }
-              },
-              "example": {
-                "refreshToken": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
               }
             }
           }
@@ -469,10 +454,7 @@
             "name": "Authorization",
             "description": "User token",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
-            }
+            "type": "string"
           },
           {
             "in": "body",
