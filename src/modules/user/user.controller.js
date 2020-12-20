@@ -114,14 +114,14 @@ class UserController {
 
   async summaryPublic(req, res, next) {
     try {
-      const {body} = req;
-      const error = validateSummary(body);
+      const {query} = req;
+      const error = validateSummary(query);
       if (error) {
         return res.status(400).send(error.details);
       }
       const summary = {
-        dailyCalories: calcDailyCaloriesService(body),
-        notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
+        dailyCalories: calcDailyCaloriesService(query),
+        notAllowedCategories: await getNotAllowedCategoryProducts(query.bloodType),
       }
       return res.status(200).json(summary)
     }
