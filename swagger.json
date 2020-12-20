@@ -15,7 +15,7 @@
   "schemes": [
     "http"
   ],
-  "host": "localhost:4000",
+  "host": "https://desolate-brook-81952.herokuapp.com/",
   "basePath": "/",
   "paths": {
     "/days/{id}": {
