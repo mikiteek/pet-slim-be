@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("../swagger.json");
 
 const userRouter = require("./modules/user/user.router");
 const dayRouter = require("./modules/day/day.router");
@@ -20,6 +22,7 @@ app.use(morgan("combined"));
 app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/days", dayRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // database
 databaseConnect();
 // error middleware

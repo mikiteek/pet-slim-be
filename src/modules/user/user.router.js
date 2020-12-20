@@ -15,7 +15,6 @@ userRouter.post(
 
 userRouter.post(
   "/regenerateToken",
-  userController.authorizeUser,
   userController.regenerateAccessToken,
 );
 

@@ -58,6 +58,19 @@ describe("days mutation", () => {
           })
           .expect(400)
       });
+
+      it("should return 404", async () => {
+        const badProductId = "1" + testDay.product.substr(1, testDay.product.length - 2) + 1;
+        const response = await request(app)
+          .post("/days/")
+          .set("Accept", "application/json")
+          .set("Authorization", "Bearer " + token)
+          .send({
+            ...testDay,
+            product: badProductId,
+          })
+          .expect(404)
+      })
       afterAll(async () => {
         await Day.findByIdAndDelete(dayAdded._id);
       });

@@ -204,7 +204,6 @@ describe("users mutations", () => {
       const response = await request(app)
         .post("/users/regenerateToken")
         .set("Accept", "application/json")
-        .set("Authorization", "Bearer " + token)
         .send({
           refreshToken: badToken,
         })
@@ -214,7 +213,6 @@ describe("users mutations", () => {
       const response = await request(app)
         .post("/users/regenerateToken")
         .set("Accept", "application/json")
-        .set("Authorization", "Bearer " + token)
         .send({
           refreshToken,
         })

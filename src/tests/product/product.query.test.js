@@ -1,6 +1,8 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 
+const User = require("../../modules/user/user.model");
+const {createUserTestHelper, loginUserTestHelper} = require("../user/user.helper");
 const app = require("../../server");
 
 describe("product queries", () => {
@@ -12,9 +14,19 @@ describe("product queries", () => {
     done()
   });
   describe("GET /products", () => {
+    let userCreated, userLogined, token;
+    beforeAll(async () => {
+      userCreated = await createUserTestHelper();
+      userLogined = await loginUserTestHelper();
+      token = userLogined.body.token;
+    });
+    afterAll(async () => {
+      await User.findByIdAndDelete(userCreated._id);
+    });
     it('should return 200', async () => {
       const response = await request(app)
         .get("/products")
+        .set("Authorization", "Bearer " + token)
         .expect(200);
     });
 
@@ -22,6 +34,7 @@ describe("product queries", () => {
       const uri = encodeURI("/products?title=омлет");
       const response = await request(app)
         .get(uri)
+        .set("Authorization", "Bearer " + token)
         .expect(200);
 
       expect(response.body).toEqual({
@@ -58,6 +71,7 @@ describe("product queries", () => {
       const uri = encodeURI("/products?title=абра-кадабра");
       const response = await request(app)
         .get(uri)
+        .set("Authorization", "Bearer " + token)
         .expect(404);
     });
   });

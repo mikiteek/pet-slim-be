@@ -1,0 +1,809 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple example Slim Mom API project",
+    "version": "1.0.2",
+    "title": "Slim Mom API",
+    "contact": {
+      "email": "SlimMom@gmail.com"
+    },
+    "license": {
+      "name": "FS29 and FS31",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "host": "localhost:4000",
+  "basePath": "/",
+  "paths": {
+    "/days/{id}": {
+      "delete": {
+        "tags": ["Days"],
+        "summary": "Delete day by id",
+        "description": "Delete day by id",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "User token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "Id number of Day you want to remove"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Wrong id"
+          },
+          "204": {
+            "description": "No content",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Nothing to remove"
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Day"
+            }
+          }
+        }
+      }
+    },
+    "/days/{date}": {
+      "get": {
+        "tags": ["Days"],
+        "summary": "Get all info about day by date",
+        "description": "Get all info about day by date",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "User token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
+            }
+          },
+          {
+            "in": "path",
+            "name": "date",
+            "description": "The date, you want to get info about",
+            "schema": {
+              "type": "string",
+              "example": "2020-05-20"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Validation date error",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/validationError"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found error"
+          },
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DayWithProduct"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/days": {
+      "post": {
+        "tags": ["Days"],
+        "summary": "Add product into day",
+        "description": "Add product into day",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "User token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "The information about, which you want to add to the day",
+            "schema": {
+              "$ref": "#/definitions/addProductToDayBody"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Wrong body properties"
+          },
+          "404": {
+            "description": "Product not found, check product's id"
+          },
+          "201": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Day"
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get list of products",
+        "description": "Add product into day",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "User token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
+            }
+          },
+          {
+            "in": "query",
+            "name": "title",
+            "description": "Title of products you want to get",
+            "schema": {
+              "type": "string",
+              "example": "омлет"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Number of page of product's list you want to get",
+            "minimum": 1,
+            "default": 1,
+            "schema": {
+              "type": "number",
+              "example": "5"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit of products per page",
+            "minimum": 2,
+            "default": 10,
+            "schema": {
+              "type": "number",
+              "example": "12"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request, check query params"
+          },
+          "404": {
+            "description": "Not found any product by your query"
+          },
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Products"
+            }
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register user",
+        "description": "Register user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Registration object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registerBody",
+              "example": {
+                "name": "Mike Jordan",
+                "email": "jordan@gmail.com",
+                "password": "yourStrong_password4-:)"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/validationError"
+            }
+          },
+          "409": {
+            "description": "Such email already exist"
+          },
+          "201": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "registerDate": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login user",
+        "description": "Login user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginBody",
+              "example": {
+                "email": "jordan@gmail.com",
+                "password": "yourStrong_password4-:)"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/validationError"
+            }
+          },
+          "404": {
+            "description": "Wrong email or password"
+          },
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/loginResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users/regenerateToken": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Get new token by refresh token",
+        "description": "Get new token by refresh token",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "refreshToken": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized error"
+          },
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/summary": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get daily norm calories and not allowed products",
+        "description": "Get daily norm calories and not allowed products",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "currentWeight",
+            "description": "Your current weight in kg",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 60
+            }
+          },
+          {
+            "in": "query",
+            "name": "height",
+            "description": "Your height in sm",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 175
+            }
+          },
+          {
+            "in": "query",
+            "name": "age",
+            "description": "Your age",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 32
+            }
+          },
+          {
+            "in": "query",
+            "name": "targetWeight",
+            "description": "Your target weight in kg",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 55
+            }
+          },
+          {
+            "in": "query",
+            "name": "bloodType",
+            "description": "Your group of blood",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 2
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/validationError"
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dayNormCalories": {
+                  "type": "string"
+                },
+                "notAllowedCategories": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Get daily norm calories and not allowed products, add data to DB",
+        "description": "Get daily norm calories and not allowed products, add data to DB",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "User token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjAwZGFjNzQ5LTQ5NzEtNGU1YS04OGI4LTBhZTFlNTgwOTgyNyIsImlhdCI6MTYwODQ2NjM4NywiZXhwIjoxNjA4NDY5OTg3fQ.nfM9OC2EpT4LXHuAKeJDksogQaWsbPxS_5nirLz34Oc"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Your current weight, height, age, target weight and group of blood",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/summaryPost"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/validationError"
+            }
+          },
+          "201": {
+            "description": "Ok, created summary",
+            "schema": {
+              "$ref": "#/definitions/summaryResponse"
+            }
+          },
+          "200": {
+            "description": "Ok, updated summary",
+            "schema": {
+              "$ref": "#/definitions/summaryResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "weight": {
+          "type": "number",
+          "default": 100
+        },
+        "title": {
+          "type": "object",
+          "properties": {
+            "ru": {
+              "type": "string"
+            },
+            "ua": {
+              "type": "string"
+            }
+          }
+        },
+        "calories": {
+          "type": "number"
+        },
+        "groupBloodNotAllowed": {
+          "type": "object",
+          "properties": {
+            "1": {
+              "type": "boolean"
+            },
+            "2": {
+              "type": "boolean"
+            },
+            "3": {
+              "type": "boolean"
+            },
+            "4": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "Products": {
+      "type": "object",
+      "properties": {
+        "docs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          }
+        },
+        "totalDocs": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        },
+        "totalPages": {
+          "type": "number"
+        },
+        "page": {
+          "type": "number"
+        },
+        "paginationCounter": {
+          "type": "number"
+        },
+        "hasPrevPage": {
+          "type": "boolean"
+        },
+        "hasNextPage": {
+          "type": "boolean"
+        },
+        "prevPage": {
+          "type": "number"
+        },
+        "nextPage": {
+          "type": "number"
+        }
+      }
+    },
+    "Day": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "example": "2020-01-20"
+        },
+        "user": {
+          "type": "string"
+        }
+      }
+    },
+    "DayWithProduct": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "product": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "weight": {
+              "type": "number"
+            },
+            "title": {
+              "type": "object",
+              "properties": {
+                "ru": {
+                  "type": "string"
+                },
+                "ua": {
+                  "type": "string"
+                }
+              }
+            },
+            "calories": {
+              "type": "number"
+            }
+          }
+        },
+        "date": {
+          "type": "string"
+        },
+        "totalWeight": {
+          "type": "number"
+        },
+        "totalCalories": {
+          "type": "number"
+        }
+      }
+    },
+    "addProductToDayBody": {
+      "properties": {
+        "product": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number"
+        },
+        "date": {
+          "type": "string",
+          "example": "2020-01-20"
+        }
+      }
+    },
+    "validationError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "registerBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "loginBody": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "loginResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "token": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "summaryPost": {
+      "type": "object",
+      "properties": {
+        "currentWeight": {
+          "type": "number",
+          "example": 60
+        },
+        "height": {
+          "type": "number",
+          "example": 175
+        },
+        "age": {
+          "type": "number",
+          "example": 25
+        },
+        "targetWeight": {
+          "type": "number",
+          "example": 55
+        },
+        "bloodType": {
+          "type": "number",
+          "example": 2
+        }
+      }
+    },
+    "summaryResponse": {
+      "type": "object",
+      "properties": {
+        "currentWeight": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "age": {
+          "type": "number"
+        },
+        "targetWeight": {
+          "type": "number"
+        },
+        "bloodType": {
+          "type": "number"
+        },
+        "user": {
+          "type": "string"
+        },
+        "dayNormCalories": {
+          "type": "string"
+        },
+        "notAllowedCategories": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
