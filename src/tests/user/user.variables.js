@@ -1,6 +1,6 @@
 const testUser = {
   name: "Donny Darko",
-  email: "darko@gmail.com",
+  email: Date.now().toString() + "darko@gmail.com",
   password: "111111",
 }
 
