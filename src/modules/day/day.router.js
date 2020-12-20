@@ -16,4 +16,10 @@ dayRouter.delete(
   dayController.removeProductFromDay,
 );
 
+dayRouter.get(
+  "/:date",
+  userController.authorizeUser,
+  dayController.getDayInfo,
+);
+
 module.exports = dayRouter;

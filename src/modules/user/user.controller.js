@@ -1,5 +1,5 @@
 const User = require("./user.model");
-const Summary = require("../summary/summary.model");
+const Summary = require("./summary.model");
 const {encryptPassword} = require("../../utils/passwordEncryptor");
 const {isPasswordValid} = require("../../utils/isPasswordValid");
 const {generateAccessToken, generateRefreshToken} = require("../../utils/tokensGenerator");
@@ -139,7 +139,7 @@ class UserController {
       }
       let summary = await Summary.findOneAndUpdate(
         {
-          userId: user.id
+          user: user.id
         },
         {
           ...body,
@@ -153,7 +153,7 @@ class UserController {
       if (!summary) {
         summary = new Summary({
           ...body,
-          userId: user.id,
+          user: user.id,
           dayNormCalories: calcDailyCaloriesService(body),
           notAllowedCategories: await getNotAllowedCategoryProducts(body.bloodType),
         });

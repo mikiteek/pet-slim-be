@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {Schema, ObjectId} = mongoose;
+const {Schema} = mongoose;
 
 const userSchema = new Schema({
   name: String,
@@ -22,12 +22,6 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  daysProducts: [
-    {
-      type: ObjectId,
-      ref: "Day"
-    }
-  ]
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 
-const authRouter = require("./modules/auth/auth.router");
 const userRouter = require("./modules/user/user.router");
 const dayRouter = require("./modules/day/day.router");
 const productRouter = require("./modules/product/product.router");
@@ -18,7 +17,6 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("combined"));
 // routes
-app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/days", dayRouter);
