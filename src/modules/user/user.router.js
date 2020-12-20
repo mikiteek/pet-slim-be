@@ -19,13 +19,13 @@ userRouter.post(
   userController.regenerateAccessToken,
 );
 
-userRouter.patch(
-  "/summaryPublic",
+userRouter.get(
+  "/summary",
   userController.summaryPublic,
 );
 
 userRouter.post(
-  "/summaryPrivate",
+  "/summary",
   userController.authorizeUser,
   userController.summaryPrivate,
 );

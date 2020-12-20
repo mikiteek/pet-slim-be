@@ -2,9 +2,10 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 
 const User = require("../../modules/user/user.model");
+const Summary = require("../../modules/user/summary.model");
 const app = require("../../server");
-const {testUser, testUserRegisterBlock} = require("./user.variables");
-const {createUserTestHelper} = require("./user.helper");
+const {testUser, testUserRegisterBlock, testSummary} = require("./user.variables");
+const {createUserTestHelper, loginUserTestHelper} = require("./user.helper");
 
 describe("users mutations", () => {
   beforeAll(done => {
@@ -14,7 +15,7 @@ describe("users mutations", () => {
     mongoose.connection.close()
     done()
   });
-  let userResponse, userCreated;
+  let userResponse, userCreated, userLogined, refreshToken, token;
   describe("POST /users/register", () => {
     describe("when user does not exist", () => {
       it("should return 201, user created success", async () => {
@@ -31,6 +32,7 @@ describe("users mutations", () => {
         await User.findByIdAndDelete(userResponse.id);
       });
     });
+
     describe("when user exist", () => {
       it("should return 409", async () => {
         const response = await request(app)
@@ -48,6 +50,7 @@ describe("users mutations", () => {
         await User.findByIdAndDelete(userCreated._id);
       });
     });
+
     describe("when wrong input email or password", () => {
       it("should return 400, bad request, bad email", async () => {
         const response = await request(app)
@@ -103,6 +106,7 @@ describe("users mutations", () => {
       });
     });
   });
+
   describe("POST /users/login", () => {
     beforeAll(async () => {
       userCreated = await createUserTestHelper();
@@ -180,6 +184,127 @@ describe("users mutations", () => {
           refreshToken: expect.any(String),
           token: expect.any(String),
         });
+      });
+    });
+  });
+
+  describe("POST /users/regenerateToken", () => {
+    beforeAll(async () => {
+      userCreated = await createUserTestHelper();
+      userLogined = await loginUserTestHelper();
+      token = userLogined.body.token;
+      refreshToken = userLogined.body.refreshToken;
+    });
+    afterAll(async () => {
+      await User.findByIdAndDelete(userCreated._id);
+    });
+
+    it("should return 401", async () => {
+      const badToken = "!" + refreshToken.substr(0, refreshToken.length - 2) + "!";
+      const response = await request(app)
+        .post("/users/regenerateToken")
+        .set("Accept", "application/json")
+        .set("Authorization", "Bearer " + token)
+        .send({
+          refreshToken: badToken,
+        })
+        .expect(401);
+    });
+    it("should return 200", async () => {
+      const response = await request(app)
+        .post("/users/regenerateToken")
+        .set("Accept", "application/json")
+        .set("Authorization", "Bearer " + token)
+        .send({
+          refreshToken,
+        })
+        .expect(200);
+      expect(response.body).toEqual({
+        token: expect.any(String),
+      });
+    });
+  });
+
+  describe("POST /users/summary", () => {
+    beforeAll(async () => {
+      userCreated = await createUserTestHelper();
+      userLogined = await loginUserTestHelper();
+      token = userLogined.body.token;
+    });
+    afterAll(async () => {
+      await User.findByIdAndDelete(userCreated._id);
+    });
+    it("should return 400", async () => {
+      const response = await request(app)
+        .post("/users/summary")
+        .set("Accept", "application/json")
+        .set("Authorization", "Bearer " + token)
+        .send({
+          ...testSummary,
+          bloodType: 5,
+        })
+        .expect(400);
+    });
+    describe("when summary already exist", () => {
+      let summaryCreated;
+      beforeAll(async () => {
+        summaryCreated = new Summary({
+          ...testSummary,
+          user: userCreated._id,
+          dayNormCalories: 1800,
+          notAllowedCategories: ["зерновые", "мучные"],
+        });
+        await summaryCreated.save();
+      });
+      afterAll(async () => {
+        await Summary.findByIdAndDelete(summaryCreated._id);
+      });
+      it("should return 200", async () => {
+        const response = await request(app)
+          .post("/users/summary")
+          .set("Accept", "application/json")
+          .set("Authorization", "Bearer " + token)
+          .send(testSummary)
+          .expect(200);
+        expect(response.body).toEqual(expect.objectContaining({
+          _id: expect.any(String),
+          user: expect.any(String),
+          currentWeight: expect.any(Number),
+          height: expect.any(Number),
+          age: expect.any(Number),
+          targetWeight: expect.any(Number),
+          bloodType: expect.any(Number),
+          dayNormCalories: expect.any(Number),
+          notAllowedCategories: expect.arrayContaining([expect.any(String)]),
+        }));
+      });
+
+    });
+
+    describe("when summary does not exist", () => {
+      let summaryCreated;
+      afterAll(async () => {
+        await Summary.findByIdAndDelete(summaryCreated._id);
+      });
+      it("should return 201", async () => {
+        const response = await request(app)
+          .post("/users/summary")
+          .set("Accept", "application/json")
+          .set("Authorization", "Bearer " + token)
+          .send(testSummary)
+          .expect(201);
+        summaryCreated = response.body;
+        expect(response.body).toEqual(expect.objectContaining({
+          _id: expect.any(String),
+          user: expect.any(String),
+          currentWeight: expect.any(Number),
+          height: expect.any(Number),
+          age: expect.any(Number),
+          targetWeight: expect.any(Number),
+          bloodType: expect.any(Number),
+          dayNormCalories: expect.any(Number),
+          notAllowedCategories: expect.arrayContaining([expect.any(String)]),
+        }));
       });
     });
   });

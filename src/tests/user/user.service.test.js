@@ -14,6 +14,8 @@ const {
   getTokenPayloadService,
   loginUserToReturnService,
   createdUserToReturnService,
+  authorizeUserToReturnService,
+  queryToNumbersService,
 } = require("../../modules/user/user.service");
 
 describe("user service", () => {
@@ -118,6 +120,30 @@ describe("user service", () => {
           id: expect.any(Object),
           registerDate: expect.any(Date),
           name: expect.any(String),
+        }));
+      });
+    });
+
+    describe("authorize user return to client", () => {
+      it("should return create user object to client", () => {
+        const user = authorizeUserToReturnService(userCreated);
+        expect(user).toEqual(expect.objectContaining({
+          id: expect.any(Object),
+          email: expect.any(String),
+          role: expect.any(String),
+        }));
+      });
+    });
+
+    describe("query for get summary to numbers", () => {
+      it("should return create user object to client", () => {
+        const user = queryToNumbersService(testSummary);
+        expect(user).toEqual(expect.objectContaining({
+          currentWeight: expect.any(Number),
+          height: expect.any(Number),
+          age: expect.any(Number),
+          targetWeight: expect.any(Number),
+          bloodType: expect.any(Number),
         }));
       });
     });

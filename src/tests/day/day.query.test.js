@@ -5,7 +5,6 @@ const Day = require("../../modules/day/day.model");
 const User = require("../../modules/user/user.model");
 const app = require("../../server");
 const {createUserTestHelper, loginUserTestHelper} = require("../user/user.helper");
-const {testUser} = require("../user/user.variables");
 const {createDayTestHelper} = require("./day.helper");
 const {testDay} = require("./day.variables");
 
