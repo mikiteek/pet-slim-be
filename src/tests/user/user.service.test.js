@@ -63,20 +63,16 @@ describe("user service", () => {
     });
 
     describe("check decoded user by token", () => {
-      it("should throw Unauthorized error",  () => {
+      it("should throw Unauthorized error",  async () => {
         const decoded = null;
-        expect(async () => {
-          await checkDecodedUserOrThrowByTokenService(decoded);
-        }).rejects.toThrow(new UnauthorizedError());
+        expect(await checkDecodedUserOrThrowByTokenService(decoded)).toBe(false);
       });
-      it("should throw Unauthorized error",  () => {
+      it("should throw Unauthorized error",  async () => {
         const decoded = {
           id: "abrakadabra",
           email: testUser.email,
         };
-        expect(async () => {
-          await checkDecodedUserOrThrowByTokenService(decoded);
-        }).rejects.toThrow(new UnauthorizedError());
+        expect(await checkDecodedUserOrThrowByTokenService(decoded)).toBeUndefined();
       });
       it("should return user",  async () => {
         const decoded = {

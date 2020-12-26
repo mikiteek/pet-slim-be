@@ -1,29 +1,17 @@
-class UserAlreadyExistError extends Error {
-  constructor(message = "Such email already exist") {
-    super(message);
-    this.status = 409;
-  }
+const UserAlreadyExistError = {
+  message: "Such email already exist",
 }
 
-class BadRequestError extends Error {
-  constructor(message = "Bad request") {
-    super(message);
-    this.status = 400;
-  }
+const BadRequestError = {
+  message: "Bad request",
 }
 
-class NotFoundError extends Error {
-  constructor(message = "Not found") {
-    super(message);
-    this.status = 404;
-  }
+const NotFoundError = {
+  message: "Not found",
 }
 
-class UnauthorizedError extends Error {
-  constructor(message = "Unauthorized") {
-    super(message);
-    this.status = 401;
-  }
+const UnauthorizedError = {
+  message: "Unauthorized",
 }
 
 module.exports = {

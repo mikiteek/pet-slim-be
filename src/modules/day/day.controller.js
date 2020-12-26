@@ -11,15 +11,15 @@ class DayController {
       const {body, user} = req;
       const error = validateAddProductToDay(body);
       if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).json(error.details);
       }
       const validProductId = validateObjectId(body.product);
       if(!validProductId) {
-        throw new BadRequestError("Wrong product's id param");
+        return res.status(404).json({message: "Wrong Id param"});
       }
       const product = await Product.findById(body.product);
       if (!product) {
-        throw new NotFoundError();
+        return res.status(404).json(NotFoundError);
       }
 
       const day = new Day({
@@ -39,11 +39,11 @@ class DayController {
       const {params: {id}} = req;
       const valid = validateObjectId(id);
       if (!valid) {
-        throw new BadRequestError("Wrong 'id' param");
+        return res.status(400).json({message: "Wrong 'id' param"});
       }
       const dayRemoved = await Day.findByIdAndRemove(id);
       if (!dayRemoved) {
-        return res.status(204).json({message: "Nothing to remove"})
+        return res.status(204).json({message: "Nothing to remove"});
       }
       return res.status(200).json(dayRemoved);
     }
@@ -57,11 +57,11 @@ class DayController {
       const {params: {date}, user} = req;
       const error = validateDayForGetInfo(date);
       if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).json(error.details);
       }
       const dayProducts = await Day.getDayProducts(date, user);
       if (!dayProducts.length) {
-        throw new NotFoundError();
+        return res.status(404).json(NotFoundError)
       }
       return res.status(200).json(dayProducts);
     }
