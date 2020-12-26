@@ -25,10 +25,10 @@ class UserController {
       const {body: {name, email, password}, body} = req;
       const error = validateRegisterInput(body);
       if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).json(error.details);
       }
       if (await isUserExistService(email)) {
-        throw new UserAlreadyExistError();
+        return res.status(409).json(UserAlreadyExistError);
       }
       const encryptedPass = await encryptPassword(password);
       const user = new User({
@@ -54,18 +54,18 @@ class UserController {
       const {body: {email, password}, body} = req;
       const error = validateLoginInput(body);
       if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).json(error.details);
       }
       const user = await User.findOne({email});
       if (!user) {
-        throw new NotFoundError("Wrong email or password");
+        return res.status(404).json({message: "Wrong email or password"});
       }
       const match = await isPasswordValid(
         password,
         user.credentials.find(cred => cred.source === "slimmom").hashPass,
       );
       if (!match) {
-        throw new NotFoundError("Wrong email or password");
+        return res.status(404).json({message: "Wrong email or password"});
       }
       const tokenPayload = getTokenPayloadService(user);
       return res.status(200).json({
@@ -83,12 +83,14 @@ class UserController {
     try {
       const authorizationHeader = req.get("Authorization");
       if (!authorizationHeader) {
-        throw new UnauthorizedError();
+        return res.status(401).json(UnauthorizedError);
       }
       const token = authorizationHeader.replace("Bearer ", "");
       const decoded = await verifyAccessToken(token);
       const user = await checkDecodedUserOrThrowByTokenService(decoded);
-
+      if (!user) {
+        return res.status(401).json(UnauthorizedError);
+      }
       req.user = authorizeUserToReturnService(user);
       req.token = token;
       next();
@@ -103,6 +105,9 @@ class UserController {
       const {body: {refreshToken}} = req;
       const decoded = await verifyRefreshToken(refreshToken);
       const user = await checkDecodedUserOrThrowByTokenService(decoded);
+      if (!user) {
+        return res.status(401).json(UnauthorizedError);
+      }
 
       const tokenPayload = getTokenPayloadService(user);
       const token = await generateAccessToken(tokenPayload);
@@ -118,7 +123,7 @@ class UserController {
       const {query} = req;
       const error = validateSummary(query);
       if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).json(error.details);
       }
       const queryNumbersType = queryToNumbersService(query);
       const summary = {
@@ -137,7 +142,7 @@ class UserController {
       const {body, user} = req;
       const error = validateSummary(body);
       if (error) {
-        return res.status(400).send(error.details);
+        return res.status(400).json(error.details);
       }
       let summary = await Summary.findOneAndUpdate(
         {

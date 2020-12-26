@@ -37,16 +37,13 @@ const getTokenPayloadService = (user) => {
 const checkDecodedUserOrThrowByTokenService = async (decoded) => {
   try {
     if (!decoded) {
-      throw new UnauthorizedError();
+      return false;
     }
     const user = await User.findById(decoded.id);
-    if (!user) {
-      throw new UnauthorizedError();
-    }
     return user;
   }
   catch (error) {
-    throw new UnauthorizedError();
+    console.log(error.message)
   }
 }
 
