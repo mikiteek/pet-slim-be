@@ -1,6 +1,8 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 
+const User = require("../../modules/user/user.model");
+const {createUserTestHelper, loginUserTestHelper} = require("./user.helper");
 const app = require("../../server");
 
 describe("users query", () => {
@@ -27,6 +29,26 @@ describe("users query", () => {
         dayNormCalories: expect.any(Number),
         notAllowedCategories: expect.arrayContaining([expect.any(String)]),
       })
+    });
+  });
+
+  describe("POST /users/logout", () => {
+    let userCreated, userLogined, token;
+    beforeAll(async () => {
+      userCreated = await createUserTestHelper();
+      userLogined = await loginUserTestHelper();
+      token = userLogined.body.token;
+    });
+    afterAll(async () => {
+      await User.findByIdAndDelete(userCreated._id);
+    });
+
+    it("should return 200", async () => {
+      const response = await request(app)
+        .post("/users/logout")
+        .set("Accept", "application/json")
+        .set("Authorization", "Bearer " + token)
+        .expect(200);
     });
   });
 });

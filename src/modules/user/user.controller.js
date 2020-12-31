@@ -79,6 +79,15 @@ class UserController {
     }
   }
 
+  async logout(req, res, next) {
+    try {
+      return res.status(200).json({message: "Success logout"});
+    }
+    catch (error) {
+      next(error);
+    }
+  }
+
   async authorizeUser(req, res, next) {
     try {
       const authorizationHeader = req.get("Authorization");

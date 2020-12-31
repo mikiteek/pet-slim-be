@@ -14,6 +14,12 @@ userRouter.post(
 );
 
 userRouter.post(
+  "/logout",
+  userController.authorizeUser,
+  userController.logout,
+);
+
+userRouter.post(
   "/regenerateToken",
   userController.regenerateAccessToken,
 );
